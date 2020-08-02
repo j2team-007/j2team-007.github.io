@@ -15,6 +15,7 @@ app.set('views', path.join(__dirname, 'resources\\views'));
 // render page
 app.get('/', (req, res) => res.render('home'));
 app.get('/news', (req, res) => res.render('news'));
+app.post('/news', (req, res) => res.render('news'));
 // app.get('/about', (req, res) => {
 //     console.log(req.query.author);
 //     res.render('about');
