@@ -7,7 +7,6 @@ function Routes(app) {
 
     // render page news
     app.use('/news', newsRoutes);
-
 }
 
 module.exports = Routes;

@@ -9,4 +9,4 @@ class NewController {
     }
 }
 
-module.exports = new NewController;
+module.exports = new NewController();

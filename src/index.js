@@ -9,7 +9,7 @@ const Routes = require('./routes/index.js');
 app.use(express.static(path.join(__dirname, 'public')));
 
 // setup file area express-handlebars
-app.engine('hbs', handlebars({extname: '.hbs'}));
+app.engine('hbs', handlebars({ extname: '.hbs' }));
 app.set('view engine', 'hbs');
 
 // add morgan check request
@@ -22,4 +22,6 @@ app.set('views', path.join(__dirname, 'resources\\views'));
 Routes(app);
 
 // render page
-app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
+app.listen(port, () =>
+    console.log(`Example app listening at http://localhost:${port}`),
+);
