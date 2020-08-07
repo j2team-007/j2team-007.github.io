@@ -5,6 +5,7 @@ const morgan = require('morgan');
 const app = express();
 const port = 4000;
 const Routes = require('./routes/index.js');
+const connect = require('./app/config/db/index.js');
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -17,6 +18,9 @@ app.use(morgan('combined'));
 
 //setup link views
 app.set('views', path.join(__dirname, 'resources\\views'));
+
+//connect DB
+connect.db();
 
 // render page
 Routes(app);

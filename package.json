@@ -29,6 +29,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "express-handlebars": "^5.1.0",
+    "mongoose": "^5.9.27",
     "morgan": "^1.10.0"
   },
   "lint-staged": {
