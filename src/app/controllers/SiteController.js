@@ -10,7 +10,6 @@ class SiteController {
                 res.render('home', {
                     Course: mutipleMongooseObject(Course),
                 });
-                console.log(mutipleMongooseObject(Course));
             })
             .catch(next);
     }
