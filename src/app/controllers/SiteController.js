@@ -1,17 +1,18 @@
 const Course = require('../model/Course.js');
+const { mutipleMongooseObject } = require('../help/tool.js');
 
 class SiteController {
     // GET [/home/]
-    index(req, res) {
+    index(req, res, next) {
         //     res.render('home');
-        Course.find({}, function (error, courses) {
-            // docs.forEach
-            if (!error) {
-                res.json(courses);
-            } else {
-                res.status(500).json({ error: 'message' });
-            }
-        });
+        Course.find({})
+            .then((Course) => {
+                res.render('home', {
+                    Course: mutipleMongooseObject(Course),
+                });
+                console.log(mutipleMongooseObject(Course));
+            })
+            .catch(next);
     }
     // GET [/about/]
     about(req, res) {
