@@ -17,7 +17,7 @@ app.set('view engine', 'hbs');
 app.use(morgan('combined'));
 
 //setup link views
-app.set('views', path.join(__dirname, 'resources\\views'));
+app.set('views', path.join(__dirname, 'resources', 'views'));
 
 //connect DB
 connect.db();
@@ -27,5 +27,5 @@ Routes(app);
 
 // render page
 app.listen(port, () =>
-    console.log(`Example app listening at http://localhost:${port}`),
+    console.log(`App listening at http://localhost:${port}`),
 );
