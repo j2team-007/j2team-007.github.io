@@ -1,1 +1,17 @@
+.image__boder {
+  display: block;
+  position: relative;
+  width: 287px;
+  height: 161px;
+  overflow: hidden; }
 
+.image__boder-scale {
+  width: 100%; }
+
+.image__boder:hover .image__boder-scale {
+  transform: scale3d(1.1, 1.1, 1.1);
+  transform-origin: center;
+  transition: transform 0.3s ease-in-out; }
+
+.nav-link {
+  color: white; }
