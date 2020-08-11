@@ -8,7 +8,7 @@ class SiteController {
         //     res.render('home');
         Course.find({})
             .then((Course) => {
-                res.render('courses', {
+                res.render('course-maneger/courses', {
                     Course: mutipleMongooseObject(Course),
                 });
             })
@@ -19,14 +19,28 @@ class SiteController {
     slug(req, res, next) {
         Course.findOne({ slug: req.params.slug })
             .then((Course) => {
-                res.render('courses-propety', {
+                res.render('course-maneger/courses-propety', {
                     Course: MongooseObject(Course),
                 });
             })
             .catch(next);
     }
 
-    // GET [/home/]
+    // GET [/home/courses/create]
+    create(req, res) {
+        res.render('course-maneger/create');
+    }
+
+    // post [/home/courses]
+    backCourses(req, res, next) {
+        const formBack = req.body;
+        formBack.image = `https://img.youtube.com/vi/${formBack.videoId}/sddefault.jpg`;
+        var Courses = new Course(formBack);
+        Courses.save()
+            .then(() => res.redirect('/home/courses'))
+            .catch(next);
+    }
+
     index(req, res) {
         res.render('home');
     }

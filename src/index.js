@@ -7,6 +7,8 @@ const port = 4000;
 const Routes = require('./routes/index.js');
 const connect = require('./app/config/db/index.js');
 
+app.use(express.urlencoded({ extended: true }));
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 // setup file area express-handlebars
