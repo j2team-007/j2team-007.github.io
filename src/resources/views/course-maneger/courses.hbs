@@ -18,14 +18,16 @@
                 <div  style=" padding: 5px 5px; width: calc(100%/3);">
                     <div class="card" style="">
                         <div class="image__boder" style="width: 100%;">
-                            <a href="/home/courses/{{this.slug}}">
+                            <a href="/courses/{{this.slug}}">
                                 <img class="image__boder-scale" src="{{this.image}}" style="position: absolute; top: -28px;" class="card-img-top" alt="{{this.name}}">
                             </a>
                         </div>
                         <div class="card-body" style="height: 17rem;">
-                            <h5 class="card-title">{{this.name}}</h5>
+                            <a class="" href="/courses/{{this.slug}}">
+                                <h5 class="card-title">{{this.name}}</h5>
+                            </a>
                             <p class="card-text" style="font-size: 14px;">{{this.decription}}</p>
-                            <a href="#" class="btn btn-primary" style="position: absolute; bottom: 1rem;">Mua Khoá Học</a>
+                            <a href="#" class="btn btn-primary btn-position" style="bottom: 1rem;">Mua Khoá Học</a>
                         </div>  
                     </div>
                 </div>

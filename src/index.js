@@ -1,6 +1,8 @@
 const express = require('express');
+const methodOverride = require('method-override');
 const path = require('path');
 const handlebars = require('express-handlebars');
+const Handlebars = require('handlebars');
 const morgan = require('morgan');
 const app = express();
 const port = 4000;
@@ -12,7 +14,23 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // setup file area express-handlebars
-app.engine('hbs', handlebars({ extname: '.hbs' }));
+app.engine(
+    'hbs',
+    handlebars({
+        extname: '.hbs',
+        // helpers: {
+        //     sum: function (a, b) { return a + b },
+        // },
+    }),
+);
+
+app.use(methodOverride('_method'));
+
+// add function helper
+Handlebars.registerHelper('sum', function (index) {
+    return index + 1;
+});
+
 app.set('view engine', 'hbs');
 
 // add morgan check request

@@ -15,3 +15,20 @@
 
 .nav-link {
   color: white; }
+
+
+.user-avatar {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  position: relative;
+  bottom: 0; }
+
+.user-profile {
+  display: flex;
+  align-items: center; }
+
+.btn-position {
+  display: flex;
+  justify-content: center;
+}
