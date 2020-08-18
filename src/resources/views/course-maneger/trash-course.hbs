@@ -1,6 +1,6 @@
 <div class="container">
-    <h2 class="mt-4">Update List</h2>
-    <a href="/courses/trash-courses">Go to trash</a>
+    <h2 class="mt-4">Trash List</h2>
+    <a href="/courses/update-course">Go to Courses</a>
     <div class="mt-4">
         <table class="table">
             <thead>
@@ -27,26 +27,26 @@
                             </form>
                         </td> --}}
                         <td>
-                            <a class="btn btn-primary" href="/courses/{{this._id}}/edit-course" role="button">Edit</a>
+                            <a class="btn btn-primary restorecourse" href="#" role="button" data-idrestorecourse="{{this._id}}">Restore</a>
                         </td>
                         <td>
-                            <a class="btn btn-primary addIdOnAction" href="#" role="button" data-toggle="modal" data-target="#deletecoursemodal" data-iddeletecourse="{{this._id}}">Remove</a>
+                            <a class="btn btn-primary" href="#" role="button" data-toggle="modal" data-target="#deletecoursemodal" data-iddeletecourse="{{this._id}}">Delete Real</a>
                         </td>
                     </tr>
- 
-                    {{else}}
+                {{else}}
                     <tr>
                         <td colspan="5" class="text-center">
-                            There are currently no courses available. 
-                            <a href="/courses/create">Click here to create course</a>
+                            Trash is Empty 
+                            <a href="/courses/update-course">Click here to comeback course</a>
                         </td>
                     </tr>
+
                 {{/each}}
             </tbody>
         </table>
     </div>  
 </div>
-{{!-- 
+
 <div id="deletecoursemodal" class="modal" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -57,17 +57,18 @@
         </button>
       </div>
       <div class="modal-body">
-        <p>Are you sure to delete this course ?</p>
+        <p>Are you sure to delete this course ? This is action cannot Restore</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary">Save changes</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary addIdOnAction">Yes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
       </div>
     </div>
   </div>
-</div> --}}
+</div>
 
 <form id="eventRemoveCourse" method="POST" action=""></form>
+<form id="eventRestoreCourse" method="POST" action=""></form>
 
 {{!-- /courses/{{this._id}}/delete-course?_method=DELETE --}}
 
@@ -76,15 +77,26 @@
     document.addEventListener("DOMContentLoaded", function () {
 
         var formDelete = document.querySelector('#eventRemoveCourse');
+        var formRestoreDelete = document.querySelector('#eventRestoreCourse');
+        var addIdOnAction = document.querySelector('.addIdOnAction');
         var idCourse;
+        
+        $('#deletecoursemodal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            idCourse = button.data('iddeletecourse');
+        });
 
-        $('.addIdOnAction').click(function (e) {
-            var idCourse = $(this).data('iddeletecourse');
-            e.preventDefault();
-            formDelete.setAttribute('action', `/courses/${idCourse}/delete-course?_method=DELETE`);
+        addIdOnAction.onclick = function () {
+            formDelete.setAttribute('action', `/courses/${idCourse}/delete-course-real?_method=DELETE`);
             formDelete.submit();
-        })
+        }
 
-    });
+        $('.restorecourse').click(function (e) {
+            var idCourse = $(this).data('idrestorecourse');
+            e.preventDefault();
+            formRestoreDelete.setAttribute('action', `/courses/${idCourse}/restore-course?_method=PATCH`);
+            formRestoreDelete.submit();
+        })
+    });   
 
 </script>

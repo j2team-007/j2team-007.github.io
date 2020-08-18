@@ -27,8 +27,8 @@ app.engine(
 app.use(methodOverride('_method'));
 
 // add function helper
-Handlebars.registerHelper('sum', function (index) {
-    return index + 1;
+Handlebars.registerHelper('sum', function (a, b) {
+    return a + b;
 });
 
 app.set('view engine', 'hbs');
