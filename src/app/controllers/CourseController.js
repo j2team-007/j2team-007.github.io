@@ -1,9 +1,10 @@
 const Course = require('../model/Course.js');
 const { mutipleMongooseObject } = require('../help/tool.js');
 const { MongooseObject } = require('../help/tool.js');
+const { Promise } = require('mongoose');
 
 class CourseController {
-    // GET [/home/courses]
+    // GET [/]
     courses(req, res, next) {
         //     res.render('home');
         Course.find({})
@@ -15,7 +16,7 @@ class CourseController {
             .catch(next);
     }
 
-    // GET [/home/:slug]
+    // GET [/:slug]
     slug(req, res, next) {
         Course.findOne({ slug: req.params.slug })
             .then((Course) => {
@@ -26,12 +27,12 @@ class CourseController {
             .catch(next);
     }
 
-    // GET [/home/courses/create]
+    // GET [/create]
     create(req, res) {
         res.render('course-maneger/create');
     }
 
-    // post [/home/courses]
+    // post [/backCourses]
     backCourses(req, res, next) {
         req.body.image = `https://img.youtube.com/vi/${req.body.videoId}/sddefault.jpg`;
         var Courses = new Course(req.body);
@@ -40,16 +41,19 @@ class CourseController {
             .catch(next);
     }
 
+    // [GET] /update-course
     updateCourse(req, res, next) {
-        Course.find({})
-            .then((Course) => {
+        Promise.all([Course.find({}), Course.countDocumentsDeleted()])
+            .then(([Course, countCourseDelete]) => {
                 res.render('course-maneger/update-course', {
+                    countCourseDelete,
                     Course: mutipleMongooseObject(Course),
                 });
             })
             .catch(next);
     }
 
+    // [GET] /:id/edit-course
     edit(req, res, next) {
         Course.findOne({ _id: req.params.id })
             .then((Course) => {
@@ -60,34 +64,40 @@ class CourseController {
             .catch(next);
     }
 
+    // [PUT] /:id/completed
     updated(req, res, next) {
         Course.updateOne({ _id: req.params.id }, req.body)
             .then(() => res.redirect('/courses/update-course'))
             .catch(next);
     }
 
+    // [DELETE] /:id/delete-course
     deleteSoft(req, res, next) {
         Course.delete({ _id: req.params.id })
             .then(() => res.redirect('/courses/update-course'))
             .catch(next);
     }
 
+    // [GET] /trash-courses
     trashCourse(req, res, next) {
-        Course.findDeleted({})
-            .then((Course) => {
+        Promise.all([Course.findDeleted({}), Course.countDocuments()])
+            .then(([Course, countpresentCourses]) => {
                 res.render('course-maneger/trash-course', {
                     Course: mutipleMongooseObject(Course),
+                    countpresentCourses,
                 });
             })
             .catch(next);
     }
 
+    // [PATCH] /:id/restore-course
     restore(req, res, next) {
         Course.restore({ _id: req.params.id })
             .then(() => res.redirect('back'))
             .catch(next);
     }
 
+    // [DELETE] /:id/delete-course-real
     deleteForce(req, res, next) {
         Course.deleteOne({ _id: req.params.id })
             .then(() => res.redirect('back'))
