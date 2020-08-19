@@ -16,19 +16,12 @@
 .nav-link {
   color: white; }
 
+.set-option-choice-width {
+  width: 160px;
+  margin: 0 20px; }
 
 .user-avatar {
-  width: 25px;
-  height: 25px;
-  border-radius: 50%;
-  position: relative;
-  bottom: 0; }
-
-.user-profile {
-  display: flex;
-  align-items: center; }
-
-.btn-position {
-  display: flex;
-  justify-content: center;
-}
+  width: 30px;
+  height: 30px;
+  border: 2px solid #b90000;
+  border-radius: 50%; }

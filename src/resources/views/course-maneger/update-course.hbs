@@ -1,73 +1,65 @@
-<div class="container">
-    <h2 class="mt-4">Update List</h2>
-    <a href="/courses/trash-courses">Go to trash ({{countCourseDelete}})</a>
-    <div class="mt-4">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">name</th>
-                    <th scope="col">Decription</th>
-                    <th scope="col">Course created</th>
-                    <th scope="col">Course updated</th>
-                    <th scope="col">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{#each Course}}
+<form id="eventRemoveCourse" method="POST" action="">
+    <div class="container">
+        <h2 class="mt-4">Update List</h2>
+        <a href="/courses/trash-courses">Go to trash ({{countCourseDelete}})</a>
+        <div class="mt-4">
+            <table class="table">
+                <thead>
+                        <div class="mt-4 mb-4 ml-2 d-flex align-items-center">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="customCheck1">
+                                <label class="custom-control-label" for="customCheck1">Check All</label>
+                            </div>
+                            <select class="custom-select set-option-choice-width" name="action" required>
+                                <option value="">--Your Choice--</option>
+                                <option value="delete">Delete</option>
+                            </select>
+                            <button type="submit" class="btn-primary btn-check-permit btn disabled">Action</button>
+                        </div>
                     <tr>
-                        <th scope="row">{{sum @index 1}}</th>
-                        <td>{{this.name}}</td>
-                        <td>{{this.decription}}</td>
-                        <td>{{this.createdAt}}</td>
-                        <td>{{this.updatedAt}}</td>
-                        {{!-- <td>
-                            <form method="GET" action="/courses/{{this._id}}/edit-course">
-                                <button type="submit" class="btn btn-primary">Edit</button>
-                            </form>
-                        </td> --}}
-                        <td>
-                            <a class="btn btn-primary" href="/courses/{{this._id}}/edit-course" role="button">Edit</a>
-                        </td>
-                        <td>
-                            <a class="btn btn-primary addIdOnAction" href="#" role="button" data-toggle="modal" data-target="#deletecoursemodal" data-iddeletecourse="{{this._id}}">Remove</a>
-                        </td>
+                        <th scope="col"></th>
+                        <th scope="col">#</th>
+                        <th scope="col">name</th>
+                        <th scope="col">Decription</th>
+                        <th scope="col">Course created</th>
+                        <th scope="col">Course updated</th>
+                        <th scope="col">Action</th>
                     </tr>
- 
-                    {{else}}
-                    <tr>
-                        <td colspan="5" class="text-center">
-                            There are currently no courses available. 
-                            <a href="/courses/create">Click here to create course</a>
-                        </td>
-                    </tr>
-                {{/each}}
-            </tbody>
-        </table>
-    </div>  
-</div>
-{{!-- 
-<div id="deletecoursemodal" class="modal" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Warning</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>Are you sure to delete this course ?</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary">Save changes</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
+                </thead>
+                <tbody>
+                    {{#each Course}}
+                        <tr>
+                            <th scope="row">
+                                <div class="form-check">
+                                    <input class="form-check-input" name="courseIds[]" value="{{this._id}}" type="checkbox">
+                                </div>
+                            </th>
+                            <th scope="row">{{sum @index 1}}</th>
+                            <td>{{this.name}}</td>
+                            <td>{{this.decription}}</td>
+                            <td>{{this.createdAt}}</td>
+                            <td>{{this.updatedAt}}</td>
+                            <td>
+                                <a class="btn btn-primary" href="/courses/{{this._id}}/edit-course" role="button">Edit</a>
+                            </td>
+                            <td>
+                                <a class="btn btn-primary addIdOnAction" href="#" role="button" data-toggle="modal" data-target="#deletecoursemodal" data-iddeletecourse="{{this._id}}">Remove</a>
+                            </td>
+                        </tr>
+    
+                        {{else}}
+                        <tr>
+                            <td colspan="5" class="text-center">
+                                There are currently no courses available. 
+                                <a href="/courses/create">Click here to create course</a>
+                            </td>
+                        </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>  
     </div>
-  </div>
-</div> --}}
-
-<form id="eventRemoveCourse" method="POST" action=""></form>
+</form>
 
 {{!-- /courses/{{this._id}}/delete-course?_method=DELETE --}}
 
@@ -75,15 +67,47 @@
 
     document.addEventListener("DOMContentLoaded", function () {
 
-        var formDelete = document.querySelector('#eventRemoveCourse');
+        var formDelete = document.querySelector("#eventRemoveCourse");
         var idCourse;
+        var checkedAllCheckbox = $("#customCheck1");
+        var checkedItems = $("input[name='courseIds[]']");
+        var btnCheckPermit = $(".btn-check-permit");
 
-        $('.addIdOnAction').click(function (e) {
-            var idCourse = $(this).data('iddeletecourse');
+        $(".addIdOnAction").click(function (e) {
+            var idCourse = $(this).data("iddeletecourse");
             e.preventDefault();
-            formDelete.setAttribute('action', `/courses/${idCourse}/delete-course?_method=DELETE`);
+            formDelete.setAttribute("action", `/courses/${idCourse}/delete-course?_method=DELETE`);
             formDelete.submit();
-        })
+        });
+
+        btnCheckPermit.click(function (e) {
+            var isDisabled = $(this).hasClass("disabled");
+            if (isDisabled) {       
+                e.preventDefault();
+            }
+            formDelete.setAttribute("action", "/courses/update-course/action-global");
+        });
+
+        function checkConditionSubmit () {
+            var coutCheckedItems = checkedItems.filter(":checked").length;
+            if (coutCheckedItems > 0) {
+                btnCheckPermit.removeClass("disabled");
+            }else {
+                btnCheckPermit.addClass("disabled");
+            }
+        }
+
+        checkedAllCheckbox.change(function () {
+            var isBool = $(this).prop("checked");
+            checkedItems.prop("checked", isBool);
+            checkConditionSubmit();
+        });
+
+        checkedItems.change(function () {
+            var isBool = checkedItems.length === checkedItems.filter(":checked").length;
+            checkedAllCheckbox.prop("checked", isBool);
+            checkConditionSubmit();
+        });
 
     });
 

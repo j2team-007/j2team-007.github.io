@@ -103,6 +103,21 @@ class CourseController {
             .then(() => res.redirect('back'))
             .catch(next);
     }
+
+    // [POST] /:id/update-course
+    actionsGlobal(req, res, next) {
+        switch (req.body.action) {
+            case 'delete':
+                Course.delete({ _id: { $in: req.body.courseIds } })
+                    .then(() => res.redirect('back'))
+                    .catch(next);
+                break;
+
+            default:
+                res.json({ message: 'Error Invalid!' });
+                break;
+        }
+    }
 }
 
 module.exports = new CourseController();
