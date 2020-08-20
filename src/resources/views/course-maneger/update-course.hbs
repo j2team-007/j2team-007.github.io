@@ -5,17 +5,17 @@
         <div class="mt-4">
             <table class="table">
                 <thead>
-                        <div class="mt-4 mb-4 ml-2 d-flex align-items-center">
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="customCheck1">
-                                <label class="custom-control-label" for="customCheck1">Check All</label>
-                            </div>
-                            <select class="custom-select set-option-choice-width" name="action" required>
-                                <option value="">--Your Choice--</option>
-                                <option value="delete">Delete</option>
-                            </select>
-                            <button type="submit" class="btn-primary btn-check-permit btn disabled">Action</button>
+                    <div class="mt-4 mb-4 ml-2 d-flex align-items-center">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="customCheck1">
+                            <label class="custom-control-label" for="customCheck1">Check All</label>
                         </div>
+                        <select class="custom-select set-option-choice-width" name="action" required>
+                            <option value="">--Your Choice--</option>
+                            <option value="delete">Delete</option>
+                        </select>
+                        <button type="submit" class="btn-primary btn-check-permit btn disabled">Action</button>
+                    </div>
                     <tr>
                         <th scope="col"></th>
                         <th scope="col">#</th>
@@ -74,39 +74,46 @@
         var btnCheckPermit = $(".btn-check-permit");
 
         $(".addIdOnAction").click(function (e) {
+
             var idCourse = $(this).data("iddeletecourse");
             e.preventDefault();
             formDelete.setAttribute("action", `/courses/${idCourse}/delete-course?_method=DELETE`);
             formDelete.submit();
+
         });
 
         btnCheckPermit.click(function (e) {
+
             var isDisabled = $(this).hasClass("disabled");
-            if (isDisabled) {       
+            if (isDisabled) {
                 e.preventDefault();
             }
             formDelete.setAttribute("action", "/courses/update-course/action-global");
+            btnCheckPermit.submit();
+
         });
 
         function checkConditionSubmit () {
-            var coutCheckedItems = checkedItems.filter(":checked").length;
-            if (coutCheckedItems > 0) {
-                btnCheckPermit.removeClass("disabled");
-            }else {
-                btnCheckPermit.addClass("disabled");
-            }
+
+            var countCheckedItems = checkedItems.filter(":checked").length;
+            return countCheckedItems > 0 ? btnCheckPermit.removeClass("disabled") : btnCheckPermit.addClass("disabled");
+
         }
 
         checkedAllCheckbox.change(function () {
+
             var isBool = $(this).prop("checked");
             checkedItems.prop("checked", isBool);
             checkConditionSubmit();
+
         });
 
         checkedItems.change(function () {
+
             var isBool = checkedItems.length === checkedItems.filter(":checked").length;
             checkedAllCheckbox.prop("checked", isBool);
             checkConditionSubmit();
+
         });
 
     });

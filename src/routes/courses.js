@@ -14,7 +14,15 @@ router.patch('/:id/restore-course', CourseController.restore);
 
 router.get('/:id/edit-course', CourseController.edit);
 
-router.post('/update-course/action-global', CourseController.actionsGlobal);
+router.post(
+    '/update-course/action-global',
+    CourseController.actionsUpdateGlobal,
+);
+
+router.post(
+    '/trash-courses/action-global',
+    CourseController.actionsTrashGlobal,
+);
 
 router.get('/update-course', CourseController.updateCourse);
 

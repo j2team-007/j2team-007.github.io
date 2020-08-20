@@ -1,72 +1,90 @@
-<div class="container">
-    <h2 class="mt-4">Trash List</h2>
-    <a href="/courses/update-course">Go to Courses ({{countpresentCourses}})</a>
-    <div class="mt-4">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">name</th>
-                    <th scope="col">Decription</th>
-                    <th scope="col">Date delete course</th>
-                    <th scope="col">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{#each Course}}
+<form id="eventRemoveCourse" method="POST" action="">
+    <div class="container">
+        <h2 class="mt-4">Trash List</h2>
+        <a href="/courses/update-course">Go to Courses ({{countpresentCourses}})</a>
+        <div class="mt-4">
+            <table class="table">
+                <thead>
+                    <div class="mt-4 mb-4 ml-2 d-flex align-items-center">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="customCheck1">
+                            <label class="custom-control-label" for="customCheck1">Check All</label>
+                        </div>
+                        <select class="custom-select set-option-choice-width" name="action" required>
+                            <option value="">--Your Choice--</option>
+                            <option value="hard-delete">Delete Real</option>
+                            <option value="restore">Restore</option>
+                        </select>
+                        <button type="submit" class="btn-primary btn-check-permit btn disabled" data-toggle="modal" data-target="">Action</button>
+                    </div>
                     <tr>
-                        <th scope="row">{{sum @index 1}}</th>
-                        <td>{{this.name}}</td>
-                        <td>{{this.decription}}</td>
-                        <td>{{this.deletedAt}}</td>
-                        {{!-- <td>
-                            <form method="GET" action="/courses/{{this._id}}/edit-course">
-                                <button type="submit" class="btn btn-primary">Edit</button>
-                            </form>
-                        </td> --}}
-                        <td>
-                            <a class="btn btn-primary restorecourse" href="#" role="button" data-idrestorecourse="{{this._id}}">Restore</a>
-                        </td>
-                        <td>
-                            <a class="btn btn-primary" href="#" role="button" data-toggle="modal" data-target="#deletecoursemodal" data-iddeletecourse="{{this._id}}">Delete Real</a>
-                        </td>
+                        <th scope="col"></th>
+                        <th scope="col">#</th>
+                        <th scope="col">name</th>
+                        <th scope="col">Decription</th>
+                        <th scope="col">Date delete course</th>
+                        <th scope="col">Action</th>
                     </tr>
-                {{else}}
-                    <tr>
-                        <td colspan="5" class="text-center">
-                            Trash is Empty 
-                            <a href="/courses/update-course">Click here to comeback course</a>
-                        </td>
-                    </tr>
+                </thead>
+                <tbody>
+                    {{#each Course}}
+                        <tr>
+                            <th scope="row">
+                                <div class="form-check">
+                                    <input class="form-check-input" name="courseIds[]" value="{{this._id}}" type="checkbox">
+                                </div>
+                            </th>
+                            <th scope="row">{{sum @index 1}}</th>
+                            <td>{{this.name}}</td>
+                            <td>{{this.decription}}</td>
+                            <td>{{this.deletedAt}}</td>
+                            {{!-- <td>
+                                <form method="GET" action="/courses/{{this._id}}/edit-course">
+                                    <button type="submit" class="btn btn-primary">Edit</button>
+                                </form>
+                            </td> --}}
+                            <td>
+                                <a class="btn btn-primary restorecourse" href="#" role="button" data-idrestorecourse="{{this._id}}">Restore</a>
+                            </td>
+                            <td>
+                                <a class="btn btn-primary" href="#" role="button" data-toggle="modal" data-target="#deletecoursemodal" data-iddeletecourse="{{this._id}}">Delete Real</a>
+                            </td>
+                        </tr>
+                    {{else}}
+                        <tr>
+                            <td colspan="5" class="text-center">
+                                Trash is Empty 
+                                <a href="/courses/update-course">Click here to comeback course</a>
+                            </td>
+                        </tr>
 
-                {{/each}}
-            </tbody>
-        </table>
-    </div>  
-</div>
-
-<div id="deletecoursemodal" class="modal" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Warning</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>Are you sure to delete this course ? This is action cannot Restore</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary addIdOnAction">Yes</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-      </div>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>  
     </div>
-  </div>
-</div>
 
-<form id="eventRemoveCourse" method="POST" action=""></form>
-<form id="eventRestoreCourse" method="POST" action=""></form>
+    {{!-- modal warning hard delete--}}
+    <div id="deletecoursemodal" class="modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Warning</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure to delete this course ? This is action cannot Restore</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary addIdOnAction">Yes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+            </div>
+            </div>
+        </div>
+    </div>
+</form>
 
 {{!-- /courses/{{this._id}}/delete-course?_method=DELETE --}}
 
@@ -75,26 +93,70 @@
     document.addEventListener("DOMContentLoaded", function () {
 
         var formDelete = document.querySelector('#eventRemoveCourse');
-        var formRestoreDelete = document.querySelector('#eventRestoreCourse');
         var addIdOnAction = document.querySelector('.addIdOnAction');
+        var checkedAllCheckbox = $("#customCheck1");
+        var checkedItems = $("input[name='courseIds[]']");
+        var btnCheckPermit = $(".btn-check-permit");
+        var checkSelection = $('select[name="action"]');
         var idCourse;
-        
+         
         $('#deletecoursemodal').on('show.bs.modal', function (event) {
+
             var button = $(event.relatedTarget);
             idCourse = button.data('iddeletecourse');
+
         });
 
         addIdOnAction.onclick = function () {
+
             formDelete.setAttribute('action', `/courses/${idCourse}/delete-course-real?_method=DELETE`);
             formDelete.submit();
-        }
+
+        };
 
         $('.restorecourse').click(function (e) {
+
             var idCourse = $(this).data('idrestorecourse');
             e.preventDefault();
-            formRestoreDelete.setAttribute('action', `/courses/${idCourse}/restore-course?_method=PATCH`);
-            formRestoreDelete.submit();
-        })
+            formDelete.setAttribute('action', `/courses/${idCourse}/restore-course?_method=PATCH`);
+            formDelete.submit();
+
+        });
+
+        btnCheckPermit.click(function (e) {
+
+            var isDisabled = $(this).hasClass('disabled');
+            if (isDisabled) {
+                e.preventDefault();
+            }
+            formDelete.setAttribute("action", "/courses/trash-courses/action-global");
+            btnCheckPermit.submit();
+
+        }); 
+
+        function checkConditionSubmit () {
+            
+            var countCheckedItems = checkedItems.filter(":checked").length;
+            return countCheckedItems > 0 ? btnCheckPermit.removeClass("disabled") : btnCheckPermit.addClass("disabled");
+            
+        };
+
+        checkedAllCheckbox.change(function() {
+
+            var isBool = $(this).prop('checked');
+            checkedItems.prop("checked", isBool);
+            checkConditionSubmit();
+
+        });
+
+        checkedItems.change(function() {
+
+            var isBool = checkedItems.length === checkedItems.filter(":checked").length;
+            checkedAllCheckbox.prop("checked", isBool);
+            checkConditionSubmit();
+
+        });
+
     });   
 
 </script>
