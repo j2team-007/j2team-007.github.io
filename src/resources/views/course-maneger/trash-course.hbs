@@ -15,7 +15,7 @@
                             <option value="hard-delete">Delete Real</option>
                             <option value="restore">Restore</option>
                         </select>
-                        <button type="submit" class="btn-primary btn-check-permit btn disabled" data-toggle="modal" data-target="">Action</button>
+                        <button type="submit" class="btn-primary btn-check-permit btn disabled" data-toggle="modal">Action</button>
                     </div>
                     <tr>
                         <th scope="col"></th>
@@ -84,6 +84,27 @@
             </div>
         </div>
     </div>
+
+    {{!-- Warning delete more than one or equal one course--}}
+    <div id="warningdeletecourses" class="modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Warning</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>This is action cannot Restore!!!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary addIdOnActionAll">Yes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+            </div>
+            </div>
+        </div>
+    </div>
 </form>
 
 {{!-- /courses/{{this._id}}/delete-course?_method=DELETE --}}
@@ -92,48 +113,73 @@
 
     document.addEventListener("DOMContentLoaded", function () {
 
-        var formDelete = document.querySelector('#eventRemoveCourse');
-        var addIdOnAction = document.querySelector('.addIdOnAction');
+        // ĐOẠN KHAI BÁO
+        var formDelete = $('#eventRemoveCourse');
+        var addIdOnAction = $('.addIdOnAction');
+        var addIdOnActionAll = $('.addIdOnActionAll'); // NÚT CLICK 2
         var checkedAllCheckbox = $("#customCheck1");
         var checkedItems = $("input[name='courseIds[]']");
-        var btnCheckPermit = $(".btn-check-permit");
+        var btnCheckPermit = $(".btn-check-permit"); // NÚT CLICK 1
         var checkSelection = $('select[name="action"]');
+        var selectionDeleteCourses = $('#warning-delete-courses');
         var idCourse;
          
-        $('#deletecoursemodal').on('show.bs.modal', function (event) {
+        $('#deletecoursemodal').on('show.bs.modal', (event) => {
 
             var button = $(event.relatedTarget);
             idCourse = button.data('iddeletecourse');
 
         });
 
-        addIdOnAction.onclick = function () {
+        addIdOnAction.click(() => {
 
-            formDelete.setAttribute('action', `/courses/${idCourse}/delete-course-real?_method=DELETE`);
+            formDelete.attr('action', `/courses/${idCourse}/delete-course-real?_method=DELETE`);
             formDelete.submit();
 
-        };
+        });
 
         $('.restorecourse').click(function (e) {
 
             var idCourse = $(this).data('idrestorecourse');
             e.preventDefault();
-            formDelete.setAttribute('action', `/courses/${idCourse}/restore-course?_method=PATCH`);
+            formDelete.attr('action', `/courses/${idCourse}/restore-course?_method=PATCH`);
             formDelete.submit();
 
         });
 
-        btnCheckPermit.click(function (e) {
+        addIdOnActionAll.click(function (e) {
 
-            var isDisabled = $(this).hasClass('disabled');
-            if (isDisabled) {
+            formDelete.attr("action", "/courses/trash-courses/action-global");
+            formDelete.submit();
+
+        });
+        
+        btnCheckPermit.click(function(e) {
+
+            var isDisabled = $(this).hasClass("disabled");
+            var stateSelector = checkSelection.find('option:selected').val();
+            if (isDisabled || stateSelector === '' || stateSelector === 'hard-delete') {
                 e.preventDefault();
+            } else {
+                formDelete.attr("action", "/courses/trash-courses/action-global");
+                formDelete.submit();
             }
-            formDelete.setAttribute("action", "/courses/trash-courses/action-global");
-            btnCheckPermit.submit();
 
-        }); 
+        });
 
+        setInterval(function() {
+            
+            var checkedClass = btnCheckPermit.hasClass('disabled');
+            var checkChangeSelect = checkSelection.find('option:selected').val();
+            if (checkChangeSelect === 'hard-delete' && !checkedClass) {
+                btnCheckPermit.attr('data-target', '#warningdeletecourses');
+            }else {
+                btnCheckPermit.removeAttr('data-target', '#warningdeletecourses');
+            }
+
+        }, 1000);
+        
+        // CHECK ELIGIBLE SUBMIT FORM
         function checkConditionSubmit () {
             
             var countCheckedItems = checkedItems.filter(":checked").length;
@@ -141,16 +187,18 @@
             
         };
 
-        checkedAllCheckbox.change(function() {
+        // HANDLE CHECKED ALL
+        checkedAllCheckbox.change(function () {
 
-            var isBool = $(this).prop('checked');
+            var isBool = $(this).prop("checked");
             checkedItems.prop("checked", isBool);
             checkConditionSubmit();
 
         });
 
-        checkedItems.change(function() {
-
+        // HANDLE CHECKED ITEM
+        checkedItems.change(function () {
+            
             var isBool = checkedItems.length === checkedItems.filter(":checked").length;
             checkedAllCheckbox.prop("checked", isBool);
             checkConditionSubmit();

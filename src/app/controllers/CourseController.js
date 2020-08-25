@@ -122,10 +122,11 @@ class CourseController {
     actionsTrashGlobal(req, res, next) {
         switch (req.body.action) {
             case 'hard-delete':
-                Course.deleteOne({ _id: { $in: req.body.courseIds } })
+                Course.deleteMany({ _id: { $in: req.body.courseIds } })
                     .then(() => res.redirect('back'))
                     .catch(next);
                 break;
+
             case 'restore':
                 Course.restore({ _id: { $in: req.body.courseIds } })
                     .then(() => res.redirect('back'))

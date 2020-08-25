@@ -67,17 +67,18 @@
 
     document.addEventListener("DOMContentLoaded", function () {
 
-        var formDelete = document.querySelector("#eventRemoveCourse");
+        var formDelete = $("#eventRemoveCourse");
         var idCourse;
         var checkedAllCheckbox = $("#customCheck1");
         var checkedItems = $("input[name='courseIds[]']");
         var btnCheckPermit = $(".btn-check-permit");
+        var checkSelection = $('select[name="action"]');
 
         $(".addIdOnAction").click(function (e) {
 
             var idCourse = $(this).data("iddeletecourse");
             e.preventDefault();
-            formDelete.setAttribute("action", `/courses/${idCourse}/delete-course?_method=DELETE`);
+            formDelete.attr("action", `/courses/${idCourse}/delete-course?_method=DELETE`);
             formDelete.submit();
 
         });
@@ -85,11 +86,14 @@
         btnCheckPermit.click(function (e) {
 
             var isDisabled = $(this).hasClass("disabled");
-            if (isDisabled) {
+            var stateSelector = checkSelection.find('option:selected').val();
+            if (isDisabled || stateSelector === '') {
                 e.preventDefault();
+                console.log("Disabled")
+            } else {
+                formDelete.attr("action", "/courses/update-course/action-global");
+                formDelete.submit();
             }
-            formDelete.setAttribute("action", "/courses/update-course/action-global");
-            btnCheckPermit.submit();
 
         });
 
