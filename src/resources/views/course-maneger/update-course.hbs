@@ -19,8 +19,14 @@
                     <tr>
                         <th scope="col"></th>
                         <th scope="col">#</th>
-                        <th scope="col">name</th>
-                        <th scope="col">Decription</th>
+                        <th scope="col">
+                            name
+                            {{{sort 'name' _sort}}}
+                        </th>
+                        <th scope="col">
+                            Decription
+                            {{{sort 'decription' _sort}}}
+                        </th>
                         <th scope="col">Course created</th>
                         <th scope="col">Course updated</th>
                         <th scope="col">Action</th>
@@ -34,7 +40,7 @@
                                     <input class="form-check-input" name="courseIds[]" value="{{this._id}}" type="checkbox">
                                 </div>
                             </th>
-                            <th scope="row">{{sum @index 1}}</th>
+                            <th scope="row">{{this._id}}</th>
                             <td>{{this.name}}</td>
                             <td>{{this.decription}}</td>
                             <td>{{this.createdAt}}</td>
@@ -89,7 +95,6 @@
             var stateSelector = checkSelection.find('option:selected').val();
             if (isDisabled || stateSelector === '') {
                 e.preventDefault();
-                console.log("Disabled")
             } else {
                 formDelete.attr("action", "/courses/update-course/action-global");
                 formDelete.submit();

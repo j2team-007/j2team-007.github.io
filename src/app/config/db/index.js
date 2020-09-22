@@ -7,9 +7,9 @@ async function db() {
             useUnifiedTopology: true,
             useCreateIndex: true,
         });
-        console.log('Conection Successfully!');
+        console.log('Conection DB Successfully!');
     } catch (enrror) {
-        console.log('Conection Fail!');
+        console.log('Conection DB Fail!');
     }
 }
 

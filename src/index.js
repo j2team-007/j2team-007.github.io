@@ -8,33 +8,27 @@ const app = express();
 const port = 4000;
 const Routes = require('./routes/index.js');
 const connect = require('./app/config/db/index.js');
+const sortCourses = require('./app/middlewares/sortCourses.js');
+const registerHelper = require('./registerHelper/tools.js');
 
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
 // setup file area express-handlebars
-app.engine(
-    'hbs',
-    handlebars({
-        extname: '.hbs',
-        // helpers: {
-        //     sum: function (a, b) { return a + b },
-        // },
-    }),
-);
+app.engine('hbs', handlebars({ extname: '.hbs' }));
 
 app.use(methodOverride('_method'));
 
 // add function helper
-Handlebars.registerHelper('sum', function (a, b) {
-    return a + b;
-});
+registerHelper(Handlebars);
 
 app.set('view engine', 'hbs');
 
 // add morgan check request
 app.use(morgan('combined'));
+
+app.use(sortCourses);
 
 //setup link views
 app.set('views', path.join(__dirname, 'resources', 'views'));

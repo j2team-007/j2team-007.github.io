@@ -31,6 +31,7 @@
     "express-handlebars": "^5.1.0",
     "method-override": "^3.0.0",
     "mongoose": "^5.9.27",
+    "mongoose-sequence": "^5.2.2",
     "morgan": "^1.10.0"
   },
   "lint-staged": {

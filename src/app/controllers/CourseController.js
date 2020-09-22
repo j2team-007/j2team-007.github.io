@@ -43,7 +43,10 @@ class CourseController {
 
     // [GET] /update-course
     updateCourse(req, res, next) {
-        Promise.all([Course.find({}), Course.countDocumentsDeleted()])
+        Promise.all([
+            Course.find({}).sortable(req),
+            Course.countDocumentsDeleted(),
+        ])
             .then(([Course, countCourseDelete]) => {
                 res.render('course-maneger/update-course', {
                     countCourseDelete,
@@ -80,7 +83,10 @@ class CourseController {
 
     // [GET] /trash-courses
     trashCourse(req, res, next) {
-        Promise.all([Course.findDeleted({}), Course.countDocuments()])
+        Promise.all([
+            Course.findDeleted({}).sortable(req),
+            Course.countDocuments(),
+        ])
             .then(([Course, countpresentCourses]) => {
                 res.render('course-maneger/trash-course', {
                     Course: mutipleMongooseObject(Course),
